@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import fitz  # PyMuPDF
-from fastapi import HTTPException
+from flask import abort
 
 def extract_text_from_pdf(pdf_bytes: bytes) -> str:
     """
