@@ -1,6 +1,7 @@
-flask
+Flask
 flask-cors
 google-genai
 duckduckgo-search
-pdfminer.six
+PyPDF2
 requests
+beautifulsoup4
