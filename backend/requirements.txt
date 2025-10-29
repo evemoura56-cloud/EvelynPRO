@@ -1,0 +1,6 @@
+flask
+flask-cors
+google-genai
+duckduckgo-search
+pdfminer.six
+requests

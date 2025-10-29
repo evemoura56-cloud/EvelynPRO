@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-br" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evelyn PRO 💜</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="icon" href="/static/avatar.png" type="image/png">
+</head>
+<body>
+
+<div class="container">
+  <!-- ========== SIDEBAR ========== -->
+  <aside class="sidebar">
+    <div class="avatar-container">
+      <img src="/static/avatar.png" alt="Avatar" class="avatar">
+      <div class="neon-glow"></div>
+    </div>
+
+    <h1>Evelyn PRO</h1>
+    <p>Sua assistente inteligente de carreira 💼✨</p>
+
+    <button id="btnUpload">📄 Enviar Currículo</button>
+    <input type="file" id="cvInput" accept=".pdf,.docx,.txt" hidden>
+
+    <div class="prefs">
+      <h3>Preferências</h3>
+      <label>Área desejada:</label>
+      <input type="text" id="prefArea" placeholder="Ex: Analista de Dados">
+
+      <label>Localização:</label>
+      <input type="text" id="prefLocal" placeholder="Ex: São Paulo - SP">
+
+      <label>ID do usuário:</label>
+      <input type="text" id="userId" placeholder="Ex: evelyn_dev">
+    </div>
+
+    <button id="btnBuscar">🔍 Buscar Vagas</button>
+    <button id="btnMatch">💡 Buscar Vagas que dão Match comigo</button>
+
+    <p class="version">Versão 3.0 — Interface Neon ✨</p>
+  </aside>
+
+  <!-- ========== MAIN CHAT ========== -->
+  <main class="main">
+    <div id="chatlog"></div>
+
+    <div id="typingIndicator" class="typing hidden">
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <span> Evelyn PRO está digitando...</span>
+    </div>
+
+    <div class="inputbar">
+      <input id="prompt" placeholder="Digite aqui sua mensagem..." autocomplete="off" />
+      <button id="send">Enviar</button>
+    </div>
+
+    <!-- Botão de tema -->
+    <button class="theme-toggle" id="themeToggle">☀️</button>
+  </main>
+</div>
+
+<!-- Scripts -->
+<script src="/static/app.js"></script>
+
+<script>
+  // 🌗 Alternância de tema (modo claro/escuro)
+  const toggle = document.getElementById('themeToggle');
+  toggle.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme');
+    const newTheme = current === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', newTheme);
+    toggle.textContent = newTheme === 'light' ? '🌙' : '☀️';
+  });
+</script>
+
+</body>
+</html>
