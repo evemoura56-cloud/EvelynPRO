@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 from dotenv import load_dotenv
-from duckduckgo_search import DDGS
+from ddgs import DDGS
 from google import genai
 
 # ===================== CONFIG =====================

@@ -2,7 +2,7 @@ Flask
 flask-cors
 requests
 google-genai
-duckduckgo-search
+ddgs
 PyMuPDF
 python-dotenv
 gunicorn
