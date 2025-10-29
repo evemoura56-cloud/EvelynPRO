@@ -3,6 +3,7 @@ flask-cors
 google-genai
 duckduckgo-search
 PyPDF2
+PyMuPDF
 requests
 beautifulsoup4
 python-dotenv

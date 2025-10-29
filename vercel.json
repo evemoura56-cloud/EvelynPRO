@@ -3,19 +3,12 @@
   "builds": [
     {
       "src": "backend/app.py",
-      "use": "@vercel/python"
-    },
-    {
-      "src": "static/**",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "templates/**",
-      "use": "@vercel/static"
+      "use": "@vercel/python",
+      "config": { "runtime": "python3.11" }
     }
   ],
   "routes": [
-    { "src": "/api/(.*)", "dest": "backend/app.py" },
-    { "src": "/(.*)", "dest": "/templates/index.html" }
+    { "src": "/static/(.*)", "dest": "/backend/static/$1" },
+    { "src": "/(.*)", "dest": "backend/app.py" }
   ]
 }
