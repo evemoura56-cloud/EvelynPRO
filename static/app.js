@@ -97,17 +97,30 @@ $('#cvInput').onchange = async (ev) => {
 };
 
 // ==========================================
-// 🔍 Buscar Vagas
+// 🔍 Buscar Vagas (com filtros avançados)
 // ==========================================
 $('#btnBuscar').onclick = async () => {
   const uid = $('#userId').value.trim() || 'anon';
   const area = $('#prefArea').value.trim();
+  const estado = $('#prefEstado').value.trim();
+  const cidade = $('#prefCidade').value.trim();
+  const modelo = $('#prefModelo').value.trim();
+  const tipo = $('#prefTipo').value.trim();
+
   if (!area) return log('m', '⚠️ Preencha o campo "Área desejada" antes de buscar.');
 
-  log('u', `🔍 Buscando vagas para: ${area}`);
+  log('u', `🔍 Buscando vagas para: ${area} (${cidade || estado || 'Brasil'})`);
   showTyping(true);
   try {
-    const res = await api('/api/find_jobs', 'POST', { user_id: uid, job_title: area, location: 'Brasil' });
+    const res = await api('/api/find_jobs', 'POST', {
+      user_id: uid,
+      job_title: area,
+      estado,
+      cidade,
+      modelo,
+      tipo
+    });
+
     showTyping(false);
 
     if (!res.jobs?.length) return log('m', 'Nenhuma vaga encontrada 😕');
@@ -118,6 +131,9 @@ $('#btnBuscar').onclick = async () => {
         <div class="vaga-card">
           <b>${j.title}</b><br>
           <p>${j.body || ''}</p>
+          <p><b>📍 Local:</b> ${j.local || cidade || estado || 'Brasil'}<br>
+             <b>📑 Modelo:</b> ${j.modelo || 'Não informado'}<br>
+             <b>💼 Tipo:</b> ${j.tipo || 'Não informado'}</p>
           <a href="${j.href}" target="_blank" class="link-vaga">🌐 Ver vaga</a><br>
           <div class="actions">
             <button onclick="analisarVaga('${j.title}','${j.href}')">Compatibilidade</button>
@@ -142,7 +158,19 @@ $('#btnMatch').onclick = async () => {
   log('u', '💡 Buscando vagas que dão Match comigo...');
   showTyping(true);
   try {
-    const res = await api('/api/match_jobs', 'POST', { user_id: uid });
+    const estado = $('#prefEstado').value.trim();
+const cidade = $('#prefCidade').value.trim();
+const modelo = $('#prefModelo').value.trim();
+const tipo = $('#prefTipo').value.trim();
+
+const res = await api('/api/match_jobs', 'POST', {
+  user_id: uid,
+  estado,
+  cidade,
+  modelo,
+  tipo
+});
+
     showTyping(false);
 
     if (!res.jobs?.length) return log('m', 'Nenhuma vaga compatível 😕');

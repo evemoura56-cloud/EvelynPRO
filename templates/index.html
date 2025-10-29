@@ -34,6 +34,23 @@
       <label>ID do usuário:</label>
       <input type="text" id="userId" placeholder="Ex: evelyn_dev">
     </div>
+<div id="filtros" class="filtros-container">
+  <input id="prefEstado" type="text" placeholder="Estado (ex: SP)" />
+  <input id="prefCidade" type="text" placeholder="Cidade (ex: São Paulo)" />
+  <select id="prefModelo">
+    <option value="">Modelo</option>
+    <option value="CLT">CLT</option>
+    <option value="PJ">PJ</option>
+    <option value="Freelancer">Freelancer</option>
+    <option value="Autônomo">Autônomo</option>
+  </select>
+  <select id="prefTipo">
+    <option value="">Tipo</option>
+    <option value="Home Office">Home Office</option>
+    <option value="Presencial">Presencial</option>
+    <option value="Híbrido">Híbrido</option>
+  </select>
+</div>
 
     <button id="btnBuscar">🔍 Buscar Vagas</button>
     <button id="btnMatch">💡 Buscar Vagas que dão Match comigo</button>
