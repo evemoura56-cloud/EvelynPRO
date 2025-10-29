@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import re
 from dotenv import load_dotenv
 from ddgs import DDGS
 from google import genai
@@ -14,16 +15,20 @@ if not API_KEY:
 
 gclient = genai.Client(api_key=API_KEY)
 
-# ===================== BUSCA MELHORADA =====================
+# ===================== BUSCA DE VAGAS REAIS =====================
 def search_jobs_on_web(job_title: str, location: str = "Brasil", max_results: int = 8):
     """
-    Busca vagas REAIS e com descrição curta.
-    Filtra sites genéricos e tenta trazer vagas únicas (não páginas de listagens).
+    Busca vagas REAIS e ignora páginas genéricas de sites de emprego.
+    Retorna apenas resultados com links diretos para vagas.
     """
+    padrao_vagas = re.compile(
+        r"(infojobs\.com\.br/vaga-de-|vagas\.com\.br/vagas/|linkedin\.com/jobs/view/|catho\.com\.br/vagas/|gupy\.io/)",
+        re.IGNORECASE,
+    )
+
     try:
-        # Busca mais específica e refinada
         query = (
-            f'"{job_title}" vaga emprego contratação site:(gupy.io OR infojobs.com.br OR trampos.co OR vagas.com.br) {location}'
+            f'"{job_title}" vaga emprego contratação site:(infojobs.com.br OR vagas.com.br OR linkedin.com/jobs OR catho.com.br OR gupy.io) {location}'
         )
 
         results = []
@@ -33,37 +38,32 @@ def search_jobs_on_web(job_title: str, location: str = "Brasil", max_results: in
                 body = r.get("body", "")
                 href = r.get("href", "")
 
-                # Filtra páginas genéricas (como "30 mil vagas")
-                if any(palavra in title.lower() for palavra in [
-                    "mil vagas", "principais vagas", "as +", "vagas de analista em:", "linkedin", "catho"
-                ]):
-                    continue
-
-                # Mantém apenas descrições curtas e links válidos
-                if href and len(body) > 60:
+                if href and padrao_vagas.search(href) and len(body) > 40:
                     results.append({
                         "title": title.strip(),
                         "href": href.strip(),
                         "body": body.strip()
                     })
+                if len(results) >= max_results:
+                    break
 
-        # Limita o retorno final
-        return results[:max_results]
+        return results
 
     except Exception as e:
         print(f"Erro na busca de vagas: {e}")
         return []
 
-# ===================== MATCH COM O CURRÍCULO =====================
+# ===================== ANÁLISE DE MATCH COM O CURRÍCULO =====================
 def match_jobs_with_cv(cv_text: str, job_title: str = ""):
     """
-    Busca vagas e analisa compatibilidade com o currículo do usuário.
+    Busca vagas REAIS e analisa compatibilidade com o currículo.
+    Retorna título, link e análise de compatibilidade.
     """
     try:
-        jobs = search_jobs_on_web(job_title or "emprego", max_results=6)
+        jobs = search_jobs_on_web(job_title or "emprego", max_results=5)
         if not jobs:
             print("Nenhuma vaga encontrada.")
-            return []
+            return [{"title": "Nenhuma vaga compatível encontrada 😕"}]
 
         matched = []
         for job in jobs:
@@ -72,11 +72,12 @@ def match_jobs_with_cv(cv_text: str, job_title: str = ""):
             titulo = job.get("title", "Vaga sem título")
 
             prompt = f"""
-Você é uma IA especialista em recrutamento. Compare o seguinte currículo com a vaga abaixo e diga:
+Você é uma IA especialista em recrutamento. Compare o seguinte currículo com a vaga abaixo e gere:
 
-- Uma **pontuação de compatibilidade (0 a 100)**
-- Um **resumo técnico objetivo (em até 2 linhas)** explicando o motivo da nota.
-- Use uma linguagem profissional, mas direta.
+1. Uma **pontuação de compatibilidade (0 a 100)**.
+2. Um **resumo técnico objetivo (em até 3 linhas)** justificando a nota.
+
+Mantenha o texto bem formatado em Markdown (use negrito e quebras de linha).
 
 ### Currículo:
 {cv_text}
@@ -90,7 +91,12 @@ Você é uma IA especialista em recrutamento. Compare o seguinte currículo com 
                 contents=[{"role": "user", "parts": [{"text": prompt}]}]
             )
 
-            if hasattr(response, "candidates") and response.candidates:
+            # Corrige para o novo formato de resposta da API
+            if hasattr(response, "text"):
+                text = response.text.strip()
+            elif hasattr(response, "output_text"):
+                text = response.output_text.strip()
+            elif hasattr(response, "candidates"):
                 part = response.candidates[0].content.parts[0]
                 text = getattr(part, "text", "").strip()
             else:
@@ -105,5 +111,5 @@ Você é uma IA especialista em recrutamento. Compare o seguinte currículo com 
         return matched
 
     except Exception as e:
-        print("Erro em match_jobs_with_cv:", e)
-        return []
+        print(f"Erro em match_jobs_with_cv: {e}")
+        return [{"title": "Erro ao processar compatibilidade 😞", "analysis": str(e)}]
