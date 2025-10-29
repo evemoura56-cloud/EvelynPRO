@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 import json
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, render_template, request, jsonify, send_from_directory
 from flask_cors import CORS
 from dotenv import load_dotenv
 from google import genai
@@ -21,7 +21,7 @@ os.makedirs(DATA_DIR, exist_ok=True)
 if not API_KEY:
     raise ValueError("⚠️ GOOGLE_API_KEY não encontrada. Verifique o .env")
 
-app = Flask(__name__, static_folder="../static", template_folder="../templates")
+app = Flask(__name__, template_folder="../templates", static_folder="../static")
 CORS(app)
 
 # Inicializa cliente do Gemini
