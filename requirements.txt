@@ -1,7 +1,8 @@
 Flask
 flask-cors
-google-genai
 requests
+google-genai
 duckduckgo-search
 PyMuPDF
 python-dotenv
+gunicorn

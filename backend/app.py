@@ -196,5 +196,5 @@ VAGA:
 
 # ================== EXECUÇÃO ==================
 if __name__ == "__main__":
-    print("🚀 Evelyn PRO iniciando...")
-    app.run(host=HOST, port=PORT, debug=True)
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
