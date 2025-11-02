@@ -1,0 +1,9 @@
+Flask
+flask-cors
+requests
+google-genai
+ddgs
+PyMuPDF
+python-dotenv
+gunicorn
+fastapi

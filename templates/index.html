@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evelyn PRO — Carreiras e Estudos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar" id="sidebarContainer">
+            <button id="closeSidebar" class="btn-close-sidebar">&times;</button>
+            
+            <div class="profile">
+                <div class="avatar-container" id="avatarContainer">
+                    <img src="{{ url_for('static', filename='avatar.png') }}" alt="Evelyn PRO" id="avatarImg">
+                    <div class="pulse-ring"></div>
+                </div>
+                <h1>Evelyn PRO</h1>
+                <p>Sua agente de carreiras e estudos 💼📚✨</p>
+                <div id="thinkingIndicator" class="thinking-indicator" style="display: none;">
+                    Evelyn Pensando...
+                </div>
+            </div>
+
+            <div class="sidebar-buttons">
+                <button id="uploadCV" class="btn btn-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                        <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/>
+                    </svg>
+                    Enviar Currículo
+                </button>
+                <input id="cvInput" type="file" accept=".pdf" hidden>
+
+                <button id="uploadStudy" class="btn btn-secondary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                        <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/>
+                    </svg>
+                    Enviar PDF de Estudos
+                </button>
+                <input id="studyInput" type="file" accept=".pdf" hidden>
+            </div>
+            
+            <div class="sidebar-divider"></div>
+
+            <div class="job-prefs">
+                <h3>Buscar Vagas</h3>
+                <input id="prefCargo" class="pref-input" placeholder="Cargo (ex: Analista de Dados)">
+                <div class="row">
+                    <input id="prefCidade" class="pref-input" placeholder="Cidade">
+                    <input id="prefEstado" class="pref-input" placeholder="UF (ex: SP)">
+                </div>
+                <div class="row">
+                    <select id="prefModelo" class="pref-input">
+                        <option value="">Modelo</option>
+                        <option value="Home Office">Home Office</option>
+                        <option value="Híbrido">Híbrido</option>
+                        <option value="Presencial">Presencial</option>
+                    </select>
+                    <select id="prefTipo" class="pref-input">
+                        <option value="">Tipo</option>
+                        <option value="CLT">CLT</option>
+                        <option value="PJ">PJ</option>
+                        <option value="Freelancer">Freelancer</option>
+                    </select>
+                </div>
+                <button id="btnBuscarVagas" class="btn btn-primary">🔍 Buscar Vagas</button>
+                <button id="btnBuscarMatch" class="btn btn-secondary">💡 Vagas com Match (IA)</button>
+            </div>
+            
+            <button id="newChat" class="btn btn-ghost btn-new-chat">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                </svg>
+                Novo Chat
+            </button>
+        </aside>
+
+        <main class="chat-main">
+            <header class="chat-header">
+                <button id="openSidebar" class="btn-open-sidebar">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+                    </svg>
+                </button>
+                <h2>Evelyn PRO</h2>
+            </header>
+
+            <div id="messages" class="messages">
+                </div>
+
+            <div id="topicSelection" class="topic-selector" style="display: none;">
+                <p>Ótimo! Para personalizar seu estudo, qual desses temas você mais gosta?</p>
+                <div class="topic-buttons">
+                    <button class="topic-btn" data-topic="Inteligência Artificial (IA)">Inteligência Artificial (IA)</button>
+                    <button class="topic-btn" data-topic="Redes Sociais">Redes Sociais</button>
+                </div>
+                <input id="customTopicInput" placeholder="Ou digite seu tema de interesse aqui...">
+            </div>
+
+            <form id="chatForm" class="chat-input-area">
+                <input id="chatInput" placeholder="Digite sua mensagem ou tema de estudo..." autocomplete="off">
+                <button type="submit" class="btn-send">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z"/>
+                    </svg>
+                </button>
+            </form>
+        </main>
+    </div>
+
+    <div id="sidebarOverlay" class="modal-overlay" style="display: none;"></div>
+
+    <div id="welcomeBackModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <h2>Que bom que você voltou! 👋</h2>
+            <p>Deseja continuar de onde parou ou iniciar uma nova conversa?</p>
+            <div class="modal-buttons">
+                <button id="continueChat" class="btn btn-primary">Continuar Conversa</button>
+                <button id="startNewChat" class="btn btn-ghost">Iniciar Novo Chat</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

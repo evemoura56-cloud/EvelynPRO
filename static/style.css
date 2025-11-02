@@ -1,0 +1,417 @@
+/* ==== RESET BÁSICO ==== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: #0B0E14;
+    color: #E0E0E0;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+}
+
+/* ==== LAYOUT PRINCIPAL ==== */
+.app-container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+}
+
+/* ==== SIDEBAR ==== */
+.sidebar {
+    width: 320px;
+    flex-shrink: 0;
+    background: #12161F;
+    border-right: 1px solid #232834;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    /* Para transição mobile */
+    transition: transform 0.3s ease-in-out;
+}
+
+.profile {
+    position: relative;
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+/* ... (Todos os estilos do Avatar, Animação e Profile continuam aqui) ... */
+.avatar-container {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 12px auto;
+}
+.profile img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid #7F56D9;
+    z-index: 2;
+    position: relative;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+.pulse-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 80px;
+    height: 80px;
+    background: #7F56D9;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    z-index: 1;
+}
+@keyframes pulse {
+    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+    100% { transform: translate(-50%, -50%) scale(1.5); opacity: 0; }
+}
+.avatar-container.thinking .pulse-ring {
+    animation: pulse 1.5s infinite ease-out;
+}
+.avatar-container.thinking #avatarImg {
+    transform: scale(1.05);
+    border-color: #a855f7;
+}
+.thinking-indicator {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #a855f7;
+    margin-top: 10px;
+    animation: fadeInOut 1.5s infinite;
+}
+@keyframes fadeInOut {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+.profile h1 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #FFFFFF;
+    margin-bottom: 4px;
+}
+.profile p {
+    font-size: 0.875rem;
+    color: #9A9FA5;
+}
+/* ... (Fim dos estilos do Profile) ... */
+
+
+.sidebar-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.btn-primary { background: #7F56D9; color: #FFFFFF; }
+.btn-primary:hover { background: #6941C6; }
+.btn-secondary { background: #232834; color: #E0E0E0; border: 1px solid #3A404D; }
+.btn-secondary:hover { background: #3A404D; }
+
+.sidebar-divider {
+    height: 1px;
+    width: 100%;
+    background-color: #232834;
+    margin: 24px 0;
+}
+
+.btn-ghost {
+    background: transparent;
+    color: #9A9FA5;
+    border: 1px solid #3A404D;
+}
+.btn-ghost:hover { background: #232834; color: #E0E0E0; }
+
+.job-prefs {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: auto;
+}
+.job-prefs h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 4px;
+}
+.pref-input {
+    width: 100%;
+    background: #1C202A;
+    border: 1px solid #3A404D;
+    color: #E0E0E0;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.875rem;
+}
+.row { display: flex; gap: 8px; }
+.row > * { flex: 1; }
+.btn-new-chat { margin-top: 16px; }
+
+/* ==== CHAT ==== */
+.chat-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: #0B0E14;
+    overflow: hidden;
+}
+
+.messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.message {
+    max-width: 75%;
+    padding: 12px 16px;
+    border-radius: 12px;
+    line-height: 1.5;
+    font-size: 0.95rem;
+    
+    /* MUDANÇA: Garante a quebra de linha em qualquer situação */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+.message.user {
+    align-self: flex-end;
+    background: #7F56D9;
+    color: #FFFFFF;
+    border-bottom-right-radius: 4px;
+}
+.message.bot {
+    align-self: flex-start;
+    background: #1C202A;
+    color: #E0E0E0;
+    border-bottom-left-radius: 4px;
+}
+.message.bot h3 { margin-top: 12px; margin-bottom: 6px; color: #C0C0FF; }
+.message.bot ul { 
+    /* MUDANÇA: Ajusta a lista para caber melhor */
+    padding-left: 20px; 
+    margin-top: 8px;
+    margin-bottom: 4px;
+}
+.message.bot li { margin-bottom: 4px; }
+.message.bot pre {
+    background: #12161F;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #3A404D;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.9rem;
+    margin-top: 8px;
+}
+.message.bot .loading-spinner {
+    width: 20px;
+    height: 20px;
+    border: 3px solid #3A404D;
+    border-top-color: #7F56D9;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.chat-input-area {
+    display: flex;
+    padding: 16px 24px;
+    border-top: 1px solid #232834;
+    background: #12161F;
+}
+#chatInput {
+    flex: 1;
+    background: #1C202A;
+    border: 1px solid #3A404D;
+    color: #FFFFFF;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 1rem;
+    margin-right: 12px;
+}
+#chatInput:focus {
+    outline: none;
+    border-color: #7F56D9;
+    box-shadow: 0 0 0 2px #7f56d940;
+}
+.btn-send {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    background: #7F56D9;
+    color: #FFFFFF;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+.btn-send:hover { background: #6941C6; }
+
+/* ==== MODAIS E OVERLAYS ==== */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    transition: opacity 0.3s ease;
+}
+.modal-content {
+    background: #1C202A;
+    padding: 24px;
+    border-radius: 12px;
+    border: 1px solid #3A404D;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+}
+.modal-content h2 { color: #FFFFFF; margin-bottom: 8px; }
+.modal-content p { color: #9A9FA5; margin-bottom: 24px; }
+.modal-buttons { display: flex; gap: 12px; }
+
+/* ==== SELETOR DE TÓPICOS ==== */
+/* ... (Estilos do topic-selector) ... */
+.topic-selector { padding: 16px 24px; background: #12161F; border-top: 1px solid #232834; }
+.topic-selector p { font-size: 0.9rem; font-weight: 500; color: #9A9FA5; margin-bottom: 12px; }
+.topic-buttons { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.topic-btn { background: #232834; color: #E0E0E0; border: 1px solid #3A404D; padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; cursor: pointer; transition: all 0.2s ease; }
+.topic-btn:hover { background: #3A404D; border-color: #7F56D9; }
+#customTopicInput { width: 100%; background: #1C202A; border: 1px solid #3A404D; color: #FFFFFF; padding: 8px 12px; border-radius: 8px; font-size: 0.9rem; }
+
+/* ==== CARD DE VAGA ==== */
+/* ... (Estilos do job-card) ... */
+.job-card { background: #1C202A; border: 1px solid #3A404D; border-radius: 12px; padding: 16px; margin: 8px 0; align-self: flex-start; width: 90%; max-width: 600px; }
+.job-card h4 { font-size: 1.1rem; font-weight: 600; color: #C0C0FF; margin-bottom: 8px; }
+.job-card-desc { font-size: 0.9rem; color: #9A9FA5; line-height: 1.5; margin-bottom: 16px; max-height: 100px; overflow: hidden; text-overflow: ellipsis; }
+.job-card-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.job-btn { background: #232834; color: #E0E0E0; border: 1px solid #3A404D; padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; cursor: pointer; transition: all 0.2s ease; }
+.job-btn:hover { background: #3A404D; border-color: #7F56D9; }
+.job-link { background: #7F56D9; color: #fff; font-weight: 500; border-color: #7F56D9; }
+
+/* ==== NOVOS ELEMENTOS DO MENU MOBILE (Escondidos no Desktop) ==== */
+.chat-header {
+    display: none; /* Escondido no Desktop */
+}
+.btn-open-sidebar {
+    display: none; /* Escondido no Desktop */
+}
+.btn-close-sidebar {
+    display: none; /* Escondido no Desktop */
+}
+
+/* ==== RESPONSIVIDADE (Mobile) - ARQUITETURA DE GAVETA ==== */
+@media (max-width: 768px) {
+    body, .app-container {
+        overflow: hidden; /* Garante que nada role */
+    }
+
+    /* 1. Sidebar vira menu gaveta (off-canvas) */
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh; /* Ocupa altura total */
+        z-index: 2000; /* Fica acima de tudo */
+        transform: translateX(-100%); /* Começa fora da tela */
+        border-right: 1px solid #3A404D;
+        width: 320px;
+        max-width: 90vw; /* Garante que não ocupe 100% em telas pequenas */
+    }
+
+    /* 2. Classe de controle (ativada por JS) */
+    .sidebar.mobile-open {
+        transform: translateX(0%); /* Entra na tela */
+        box-shadow: 10px 0 30px rgba(0,0,0,0.3);
+    }
+    
+    /* 3. Overlay (ativado por JS) */
+    #sidebarOverlay.visible {
+        display: flex;
+        z-index: 1999; /* Fica abaixo do menu, mas acima do chat */
+    }
+
+    /* 4. Chat ocupa 100% da tela */
+    .chat-main {
+        flex: 1; /* Ocupa todo o espaço (sidebar está fora do fluxo) */
+        width: 100%;
+    }
+    
+    /* 5. Mostra os botões de controle do menu */
+    .btn-close-sidebar {
+        display: block;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: transparent;
+        border: none;
+        color: #9A9FA5;
+        font-size: 2.5rem;
+        line-height: 1;
+        padding: 0 10px;
+        cursor: pointer;
+    }
+    
+    .chat-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 12px 16px;
+        border-bottom: 1px solid #232834;
+        background: #12161F;
+    }
+    .chat-header h2 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #fff;
+    }
+    
+    .btn-open-sidebar {
+        display: block;
+        background: transparent;
+        border: none;
+        color: #E0E0E0;
+        cursor: pointer;
+        padding: 4px;
+    }
+    
+    .messages {
+        /* MUDANÇA: Padding menor no mobile */
+        padding: 16px;
+    }
+    
+    .message { 
+        max-width: 90%; /* Balões de chat usam 90% */
+    }
+    .job-card { 
+        width: 100%; /* Cards de vaga usam 100% */
+    }
+}

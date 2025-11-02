@@ -1,0 +1,11 @@
+services:
+  app:
+    build: .
+    container_name: evelynpro_app
+    ports:
+      - "80:5000"
+    env_file:
+      - .env
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
